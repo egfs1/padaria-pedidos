@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Companies {
+  id String @id @default(uuid())
+  name String @unique
+  prices Prices[]
+  sub_orders SubOrders[]
+  orders Orders[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("companies")
+}
+
+model Products {
+  id String @id @default(uuid())
+  name String @unique
+  prices Prices[]
+  orders SubOrders[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("products")
+}
+
+model Prices {
+  id String @id @default(uuid())
+  price Float
+  product Products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id String
+  company Companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("prices")
+}
+model Orders {
+  id String @id @default(uuid())
+  company Companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id String
+  sub_orders SubOrders[]
+  date DateTime
+  value Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+
+  @@map("orders")
+}
+
+model SubOrders {
+  id String @id @default(uuid())
+  company Companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id String
+  product Products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id String
+  order Orders @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order_id String
+  quantity Float
+  value Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("suborders")
+}
+

@@ -1,0 +1,46 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Editar Valor</h2>
+        </div>
+        <div class="card-body">
+            <form class="needs-validation" method="POST" action='/prices/update' novalidate>
+                <label for="">Empresa</label>
+                <select  disabled name="company_id" class="form-control" required>
+                    <% companies.forEach(company =>{ %>
+                        <% if(price.company_id == company.id){ %>
+                        <option value="<%= company.id %>" selected><%= company.name %></option>
+                        <% } %>
+                    <%})%>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-4">Produto</label>
+                <select disabled name="product_id" class="form-control" required>
+                    <% products.forEach(product =>{ %>
+                        <% if(price.product_id == product.id){ %>
+                        <option value="<%= product.id %>"><%= product.name %></option>
+                        <% } %>
+                    <%})%>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-4">Valor</label>
+                <input name="price" type="number" class="form-control" value="<%=price.price%>" step=".01" required>
+                <div class="invalid-feedback">
+                    Valor inválido
+                </div>
+                <input type="hidden" name='id' value='<%= price.id %>'>
+                <button class="btn btn-primary mt-4">Editar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer.ejs') %>
+<%- include ('../partials/form-validate.ejs') %>

@@ -1,0 +1,89 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Novo Pedido</h2>
+        </div>
+        <div class="card-body">
+            <form  class="needs-validation" name="form" method="POST" action='/orders/save' novalidate>
+                <label for="">Empresa</label>
+                <select name="company_id" class="form-control" required>
+                    <% companies.forEach(company =>{ %>
+                        <option value="<%= company.id %>"><%= company.name %></option>
+                    <%})%>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-2">Data</label>
+                <input  name="date" class='form-control' type="date" required>
+                <div class="invalid-feedback">
+                    Data inválida
+                </div>
+                <div id="suborders">
+                    <div id="suborder" name="suborder1">
+                        <hr>
+                        <div class="card-header">
+                                <h4>Produto</h4>
+                                <a id="1" name="delete" class="btn btn-danger rounded-circle" style="float:right" onclick="remove(this.id)">x</a>
+                        </div>
+                        <div class="card-body">
+                            <label for="">Produto</label>
+                            <select id="product_id" name="product_id" class="form-control" required>
+                                <% products.forEach(product =>{ %>
+                                    <option value="<%= product.id %>"><%= product.name %></option>
+                                <%})%>
+                            </select>
+                            <div class="invalid-feedback">
+                                Produto inválido
+                            </div>
+                            <label class="mt-4">Quantidade</label>
+                            <input id="quantity" name="quantity" type="number" class="form-control" step=".01" required>
+                            <div class="invalid-feedback">
+                                Quantidade inválida
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-12">
+                        <a class="btn btn-primary rounded-circle" style="float:right" onclick="add()">+</a>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var numProducts = 1
+    var numeration = 1
+    function add(){
+        numeration++;
+
+        var suborder = document.querySelector('#suborder');
+        var clone = suborder.cloneNode(true);
+
+        clone.querySelectorAll(`[name="delete"]`)[0].id = numeration
+        clone.setAttribute('name', 'suborder' + numeration)
+        
+        clone.querySelectorAll(`[id="quantity"`)[0].value = ''
+        clone.querySelectorAll(`[id="product_id"`)[0].value = ''
+
+        var element = document.getElementById("suborders");
+        element.appendChild(clone);
+        numProducts++
+    }
+
+    function remove(product){
+        if(numProducts>1){
+            document.getElementsByName('suborder'+ product)[0].remove()
+            numProducts--
+        }
+    }
+</script>
+<%- include ('../partials/footer.ejs') %>
+<%- include ('../partials/form-validate.ejs') %>

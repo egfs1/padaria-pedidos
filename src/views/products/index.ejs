@@ -1,0 +1,40 @@
+<%- include('../partials/header.ejs') %>
+<div class="container-xl">
+    <hr>
+    <div class="card-header">
+        <h2>Produtos</h2>
+        <hr>
+        <a class="btn btn-primary" href='/products/new'>Adicionar novo produto</a>
+    </div>
+    <table class='table table-bordered'>
+        <tr>
+            <th>Produto</th>
+            <th>Ações</th>
+        </tr>
+        <tbody>
+            <% products.forEach(product => { %>
+            <tr>
+                <th><%=product.name%></th>
+                <th>
+                    <form method="POST" action="/products/edit/<%= product.id %>" style='display: inline'>
+                        <input type="hidden" name="id" value=<%= product.id %>>
+                        <button class="btn btn-warning">Editar</button>
+                    </form>
+                    <form method="POST" action="/products/delete" style='display: inline' onsubmit="confirmDelete(event)">
+                        <input type="hidden" name="id" value=<%= product.id %>>
+                        <button class="btn btn-danger">Excluir</button>
+                    </form>
+                </th>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include('../partials/footer.ejs') %>
+<script>
+    function confirmDelete(event){
+        if(!confirm('Você tem certeza que quer deletar?')){
+            event.preventDefault();
+        }
+    }
+</script>

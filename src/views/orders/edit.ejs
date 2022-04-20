@@ -1,0 +1,96 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Novo Pedido</h2>
+        </div>
+        <div class="card-body">
+            <form  class="needs-validation" name="form" method="POST" action='/orders/update' novalidate>
+                <label for="">Empresa</label>
+                <select name="company_id" class="form-control" required disabled>
+                        <option value="<%= order.company.id %>"><%= order.company.name %></option>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-2">Data</label>
+                <input  name="date" class='form-control' type="date" value="<%= order.date.toLocaleString('af-ZA', {year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC'}) %>" required disabled>
+                <div class="invalid-feedback">
+                    Data inválida
+                </div>
+                <div id="suborders">
+                    <%  for (let index = 0; index < order.sub_orders.length; index++) {%>
+                    <div id="suborder" name=<%- "suborder" +  (index+1) %>>
+                        <hr>
+                        <div class="card-header">
+                                <h4>Produto</h4>
+                                <a id=<%- (index+1) %> name="delete" class="btn btn-danger rounded-circle" style="float:right" onclick="remove(this.id)">x</a>
+                        </div>
+                        <div class="card-body">
+                            <label for="">Produto</label>
+                            <select id="product_id" name="product_id" class="form-control" required>
+                                <% products.forEach(product =>{ %>
+                                    <% if(order.sub_orders[index].product_id == product.id){ %>
+                                        <option value="<%= product.id %>" selected><%= product.name %></option>
+                                    <%} else {%>
+                                        <option value="<%= product.id %>"><%= product.name %></option>
+                                    <%}%>
+                                <%})%>
+                            </select>
+                            <div class="invalid-feedback">
+                                Produto inválido
+                            </div>
+                            <label class="mt-4">Quantidade</label>
+                            <input id="quantity" name="quantity" type="number" class="form-control" step=".01" value="<%=order.sub_orders[index].quantity%>" required>
+                            <div class="invalid-feedback">
+                                Quantidade inválida
+                            </div>
+                            <input id="suborder_id" type="hidden" name="suborder_id" value="<%=order.sub_orders[index].id%>"> 
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                <div class="row">
+                    <div class="col col-12">
+                        <a class="btn btn-primary rounded-circle" style="float:right" onclick="add()">+</a>
+                    </div>
+                </div>
+                <hr>
+                <input type="hidden" name="id" value="<%=order.id%>"> 
+                <button type="submit" class="btn btn-primary">Editar</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var numProducts = <%=order.sub_orders.length%>
+    var numeration = <%=order.sub_orders.length%>
+    function add(){
+        numeration++;
+
+        var suborder = document.querySelector('#suborder');
+        var clone = suborder.cloneNode(true);
+
+        clone.querySelectorAll(`[name="delete"]`)[0].id = numeration
+        clone.setAttribute('name', 'suborder' + numeration)
+        
+        clone.querySelectorAll(`[id="quantity"`)[0].value = ''
+        clone.querySelectorAll(`[id="product_id"`)[0].value = ''
+        clone.querySelectorAll(`[id="suborder_id"`)[0].value = 'null'
+
+        var element = document.getElementById("suborders");
+        element.appendChild(clone);
+        numProducts++
+    }
+
+    function remove(product){
+        if(numProducts>1){
+            document.getElementsByName('suborder'+ product)[0].remove()
+            numProducts--
+        }
+    }
+</script>
+<%- include ('../partials/footer.ejs') %>
+<%- include ('../partials/form-validate.ejs') %>

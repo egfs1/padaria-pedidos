@@ -1,0 +1,41 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Novo Preço</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action='/prices/save' class="needs-validation" novalidate>
+                <label for="">Empresa</label>
+                <select name="company_id" class="form-control" required>
+                    <% companies.forEach(company =>{ %>
+                        <option value="<%= company.id %>"><%= company.name %></option>
+                    <%})%>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-4">Produto</label>
+                <select name="product_id" class="form-control" required>
+                    <% products.forEach(product =>{ %>
+                        <option value="<%= product.id %>"><%= product.name %></option>
+                    <%})%>
+                </select>
+                <div class="invalid-feedback">
+                    Opção inválida
+                </div>
+                <label class="mt-4">Valor</label>
+                <input name="price" type="number" class="form-control" step=".01" required>
+                <div class="invalid-feedback">
+                    Valor inválido
+                </div>
+                <button class="btn btn-primary mt-4">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer.ejs') %>
+<%- include ('../partials/form-validate.ejs') %>

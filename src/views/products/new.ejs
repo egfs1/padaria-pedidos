@@ -1,0 +1,22 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Novo produto</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action='/products/save' class="needs-validation" novalidate>
+                <input class='form-control' type="text" name='name' placeholder='Nome do produto' required>
+                <div class="invalid-feedback">
+                    Nome inválido
+                </div>
+                <button class="btn btn-primary mt-4">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer.ejs') %>
+<%- include ('../partials/form-validate.ejs') %>

@@ -1,0 +1,54 @@
+<%- include('../partials/header.ejs') %>
+<div class="container-xl">
+    <hr>
+    <div class="card-header">
+        <h2>Preços</h2>
+        <hr>
+        <a class="btn btn-primary" href='/prices/new'>Adicionar novo preço</a>
+    </div>
+    <% companies.forEach(company =>{ %>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4><%=company.name%></h4>
+    
+            </div>
+
+        </div>
+        <table class='table table-bordered'>
+            <tr>
+                <th>Empresa</th>
+                <th>Produto</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+            <tbody>
+                <% prices.forEach(price => { %>
+                <% if(price.company.name != company.name){return} %> 
+                <tr>
+                    <th><%=price.company.name%></th>
+                    <th><%=price.product.name%></th>
+                    <th><%=price.price%></th>
+                    <th>
+                        <form method="POST" action="/prices/edit/<%= price.id %>" style='display: inline'>
+                            <input type="hidden" name="id" value=<%= price.id %>>
+                            <button class="btn btn-warning">Editar</button>
+                        </form>
+                        <form method="POST" action="/prices/delete" style='display: inline' onsubmit="confirmDelete(event)">
+                            <input type="hidden" name="id" value=<%= price.id %>>
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </th>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% }) %>
+</div>
+<%- include('../partials/footer.ejs') %>
+<script>
+    function confirmDelete(event){
+        if(!confirm('Você tem certeza que quer deletar?')){
+            event.preventDefault();
+        }
+    }
+</script>

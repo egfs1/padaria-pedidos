@@ -1,0 +1,40 @@
+<%- include('../partials/header.ejs') %>
+<div class="container-xl">
+    <hr>
+    <div class="card-header">
+        <h2>Empresas</h2>
+        <hr>
+        <a class="btn btn-primary" href='/companies/new'>Adicionar nova empresa</a>
+    </div>
+    <table class='table table-bordered'>
+        <tr>
+            <th>Empresa</th>
+            <th>Ações</th>
+        </tr>
+        <tbody>
+            <% companies.forEach(company => { %>
+            <tr>
+                <th><%=company.name%></th>
+                <th>
+                    <form method="POST" action="/companies/edit/<%= company.id %>" style='display: inline'>
+                        <input type="hidden" name="id" value=<%= company.id %>>
+                        <button class="btn btn-warning">Editar</button>
+                    </form>
+                    <form method="POST" action="/companies/delete" style='display: inline' onsubmit="confirmDelete(event)">
+                        <input type="hidden" name="id" value=<%= company.id %>>
+                        <button class="btn btn-danger">Excluir</button>
+                    </form>
+                </th>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include('../partials/footer.ejs') %>
+<script>
+    function confirmDelete(event){
+        if(!confirm('Você tem certeza que quer deletar?')){
+            event.preventDefault();
+        }
+    }
+</script>
