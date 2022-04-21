@@ -3,14 +3,17 @@
     <hr>
     <div class="card-header">
         <h2>Preços</h2>
-        <hr>
-        <a class="btn btn-primary" href='/prices/new'>Adicionar novo preço</a>
     </div>
     <% companies.forEach(company =>{ %>
         <div class="card mt-4">
             <div class="card-header">
                 <h4><%=company.name%></h4>
-    
+                <div class="col col-12">
+                    <form method="POST" action="/prices/new/" style='display: inline'>
+                        <input type="hidden" name="company_id" value=<%= company.id %>>
+                        <button class="btn btn-primary rounded-circle" style="float:right">+</button>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -27,7 +30,7 @@
                 <tr>
                     <th><%=price.company.name%></th>
                     <th><%=price.product.name%></th>
-                    <th><%=price.price%></th>
+                    <th><%=price.price.toFixed(2)%></th>
                     <th>
                         <form method="POST" action="/prices/edit/<%= price.id %>" style='display: inline'>
                             <input type="hidden" name="id" value=<%= price.id %>>

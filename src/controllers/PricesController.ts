@@ -28,13 +28,12 @@ router.get('/prices', async(request, response)=> {
     })
 })
 
-router.get('/prices/new', async (request, response)=> {
-    const companies = await prismaClient.companies.findMany({
-        orderBy: [
-            {
-                name: 'desc'
-            }
-        ]
+router.post('/prices/new', async (request, response)=> {
+    const company_id = request.body.company_id
+    const company = await prismaClient.companies.findUnique({
+        where: {
+            id: company_id
+        }
     })
     const products = await prismaClient.products.findMany({
         orderBy: [
@@ -44,7 +43,7 @@ router.get('/prices/new', async (request, response)=> {
         ]
     })
     response.render('prices/new', {
-        companies: companies,
+        company: company,
         products: products
     })
 })
