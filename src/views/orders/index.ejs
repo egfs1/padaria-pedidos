@@ -12,7 +12,7 @@
                 <div class="row">
                     <h4><%=company.name%></h4>
                     <div class="col col-12">
-                        <form method="GET" action="/orders/new/" style='display: inline'>
+                        <form method="POST" action="/orders/new/" style='display: inline'>
                             <input type="hidden" name="company_id" value=<%= company.id %>>
                             <button class="btn btn-primary rounded-circle" style="float:right">+</button>
                         </form>

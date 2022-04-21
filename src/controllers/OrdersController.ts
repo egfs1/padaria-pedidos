@@ -31,8 +31,9 @@ router.get('/orders', async(request, response)=> {
     })
 })
 
-router.get('/orders/new', async (request, response)=> {
-    const company_id = request.body.conpany_id
+router.post('/orders/new', async (request, response)=> {
+    const company_id = request.body.company_id
+    console.log(company_id)
     const company = await prismaClient.companies.findUnique({
         where: {
             id: company_id
@@ -46,7 +47,7 @@ router.get('/orders/new', async (request, response)=> {
         ]
     })
     response.render('orders/new', {
-        companies: company,
+        company: company,
         products: products,
     })
 })
