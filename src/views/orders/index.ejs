@@ -3,8 +3,6 @@
     <hr>
     <div class="card-header">
         <h2>Pedidos</h2>
-        <hr>
-        <a class="btn btn-primary" href='/orders/new'>Adicionar novo pedido</a>
     </div>
     <% companies.forEach(company =>{ %>
         <div class="card mt-4">
@@ -34,7 +32,7 @@
                 <tr>
                     <th><%=order.company.name%></th>
                     <th><%=new Date(order.date).toLocaleDateString('pt-BR', {timeZone: 'UTC'})%></th>
-                    <th><%=order.value%></th>
+                    <th><%=order.value.toFixed(2)%></th>
                     <th>
                         <form method="POST" action="/orders/edit/<%= order.id %>" style='display: inline'>
                             <input type="hidden" name="id" value=<%= order.id %>>
