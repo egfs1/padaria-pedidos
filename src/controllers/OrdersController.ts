@@ -39,16 +39,17 @@ router.post('/orders/new', async (request, response)=> {
             id: company_id
         }
     })
-    const products = await prismaClient.products.findMany({
-        orderBy: [
-            {
-                name: 'desc'
-            }
-        ]
+    const prices = await prismaClient.prices.findMany({
+        where: {
+            company_id: company_id,
+        },
+        include: {
+            product: true
+        }
     })
     response.render('orders/new', {
         company: company,
-        products: products,
+        prices: prices,
     })
 })
 
@@ -224,6 +225,64 @@ router.post('/orders/update', async (request, response)=> {
         }
     })
     response.redirect('/orders')
+
+})
+
+router.post('/orders/quantitative', async (request, response)=>{
+    const company_id = request.body.company_id
+    const month = parseInt(request.body.month)
+    const orders = await prismaClient.orders.findMany({
+        where: {
+            date: {
+                gte: new Date(Date.UTC(2022,month-1,1,0,0,0)),
+                lte: new Date(Date.UTC(2022,month-1,31,23,59,59)),
+            },
+            company_id: company_id,
+        },
+        include: {
+            sub_orders: true
+        }
+    })
+
+    const company = await prismaClient.companies.findUnique({
+        where: {
+            id: company_id
+        }
+    })
+
+    const prices = await prismaClient.prices.findMany({
+        where: {
+            company_id: company_id,
+        },
+        include: {
+            product: true
+        }
+    })
+
+    var quantitatives: { product: string; quantity: number; value: number }[] = []
+    for (let index = 0; index < prices.length; index++) {
+        var quantity = 0
+        var value = 0
+        orders.forEach(order => {
+            order.sub_orders.forEach(suborder => {
+                if (prices[index].product_id == suborder.product_id){
+                    quantity += suborder.quantity
+                    value += suborder.value
+                }
+            })
+        })
+        quantitatives.push({
+            product: prices[index].product.name,
+            quantity: quantity,
+            value: value
+        })
+    }
+
+    response.render('orders/quantitative', {
+        quantitatives: quantitatives,
+        company: company,
+        month: month.toString().padStart(2, '0')
+    })
 
 })
 

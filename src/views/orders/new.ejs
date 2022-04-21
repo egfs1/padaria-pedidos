@@ -30,8 +30,8 @@
                         <div class="card-body">
                             <label for="">Produto</label>
                             <select id="product_id" name="product_id" class="form-control" required>
-                                <% products.forEach(product =>{ %>
-                                    <option value="<%= product.id %>"><%= product.name %></option>
+                                <% prices.forEach(price =>{ %>
+                                    <option value="<%= price.product.id %>"><%= price.product.name %></option>
                                 <%})%>
                             </select>
                             <div class="invalid-feedback">
