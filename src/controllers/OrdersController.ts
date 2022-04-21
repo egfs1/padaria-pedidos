@@ -11,7 +11,7 @@ router.get('/orders', async(request, response)=> {
     const orders = await prismaClient.orders.findMany({
         orderBy: [
             {
-                updatedAt: 'desc'
+                date: 'desc'
             },
         ],
         include: {
@@ -32,12 +32,11 @@ router.get('/orders', async(request, response)=> {
 })
 
 router.get('/orders/new', async (request, response)=> {
-    const companies = await prismaClient.companies.findMany({
-        orderBy: [
-            {
-                name: 'desc'
-            }
-        ]
+    const company_id = request.body.conpany_id
+    const company = await prismaClient.companies.findUnique({
+        where: {
+            id: company_id
+        }
     })
     const products = await prismaClient.products.findMany({
         orderBy: [
@@ -47,8 +46,8 @@ router.get('/orders/new', async (request, response)=> {
         ]
     })
     response.render('orders/new', {
-        companies: companies,
-        products: products
+        companies: company,
+        products: products,
     })
 })
 
