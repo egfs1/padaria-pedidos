@@ -28,8 +28,8 @@ router.get('/prices', async(request, response)=> {
     })
 })
 
-router.post('/prices/new', async (request, response)=> {
-    const company_id = request.body.company_id
+router.get('/prices/new', async (request, response)=> {
+    const company_id = request.query.company_id?.toString()
     const company = await prismaClient.companies.findUnique({
         where: {
             id: company_id
@@ -38,7 +38,7 @@ router.post('/prices/new', async (request, response)=> {
     const products = await prismaClient.products.findMany({
         orderBy: [
             {
-                name: 'desc'
+                updatedAt: 'asc'
             }
         ]
     })
@@ -69,14 +69,14 @@ router.post('/prices/save', async (request, response)=> {
                     company_id: company_id,
                 }
             })
-            response.redirect('/prices')
+            response.redirect('/prices/new/?company_id='+ company_id)
             
         } catch (error) {
-            response.redirect('/prices/new')
+            response.redirect('/prices')
         }
     } else {
         console.log('Ja existe um preço definido')
-        response.redirect('/prices/new')
+        response.redirect('/prices')
     }
 })
 

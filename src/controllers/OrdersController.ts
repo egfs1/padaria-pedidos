@@ -31,8 +31,8 @@ router.get('/orders', async(request, response)=> {
     })
 })
 
-router.post('/orders/new', async (request, response)=> {
-    const company_id = request.body.company_id
+router.get('/orders/new', async (request, response)=> {
+    const company_id = request.query.company_id?.toString()
     console.log(company_id)
     const company = await prismaClient.companies.findUnique({
         where: {
@@ -40,6 +40,11 @@ router.post('/orders/new', async (request, response)=> {
         }
     })
     const prices = await prismaClient.prices.findMany({
+        orderBy: [
+            {
+                updatedAt: 'asc'
+            }
+        ],
         where: {
             company_id: company_id,
         },
@@ -100,7 +105,7 @@ router.post('/orders/save', async (request, response)=> {
             value: total
         }
     })
-    response.redirect('/orders')
+    response.redirect('/orders/new/?company_id=' + company_id)
 })
 
 router.post('/orders/delete', async (request, response)=>{
@@ -251,6 +256,11 @@ router.post('/orders/quantitative', async (request, response)=>{
     })
 
     const prices = await prismaClient.prices.findMany({
+        orderBy: [
+            {
+                updatedAt: 'asc'
+            }
+        ],
         where: {
             company_id: company_id,
         },
