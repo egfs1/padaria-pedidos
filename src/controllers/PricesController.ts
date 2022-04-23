@@ -38,7 +38,7 @@ router.get('/prices/new', async (request, response)=> {
     const products = await prismaClient.products.findMany({
         orderBy: [
             {
-                updatedAt: 'asc'
+                updatedAt: 'desc'
             }
         ]
     })
