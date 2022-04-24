@@ -31,11 +31,11 @@
                         <div class="card-body">
                             <label for="">Produto</label>
                             <select id="product_id" name="product_id" class="form-control" required>
-                                <% products.forEach(product =>{ %>
-                                    <% if(order.sub_orders[index].product_id == product.id){ %>
-                                        <option value="<%= product.id %>" selected><%= product.name %></option>
+                                <% prices.forEach(price =>{ %>
+                                    <% if(order.sub_orders[index].product_id == price.product_id){ %>
+                                        <option value="<%= price.product_id %>" selected><%= price.product.name %></option>
                                     <%} else {%>
-                                        <option value="<%= product.id %>"><%= product.name %></option>
+                                        <option value="<%= price.product_id %>"><%= price.product.name %></option>
                                     <%}%>
                                 <%})%>
                             </select>

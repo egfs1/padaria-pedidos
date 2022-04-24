@@ -131,17 +131,23 @@ router.post('/orders/edit/:id', async (request, response)=>{
         rejectOnNotFound: true
     })
 
-    const products = await prismaClient.products.findMany({
+    const prices = await prismaClient.prices.findMany({
         orderBy: [
             {
-                name: 'desc'
+                updatedAt: 'asc'
             }
-        ]
+        ],
+        where: {
+            company_id: order.company_id,
+        },
+        include: {
+            product: true
+        }
     })
     
     response.render('orders/edit', {
         order: order,
-        products: products
+        prices: prices
     })
 })
 
@@ -194,6 +200,7 @@ router.post('/orders/update', async (request, response)=> {
                     }
                 })             
             } else {
+                
                 await prismaClient.subOrders.create({
                     data: {
                         company_id: order.company_id,
@@ -206,7 +213,7 @@ router.post('/orders/update', async (request, response)=> {
             }
             total += value
         } catch (error) {
-            console.log('error') 
+            throw error 
             return
         }
     }
